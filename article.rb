@@ -8,7 +8,7 @@ Dotenv.load
 
 ActiveRecord::Base.logger = Logger.new('debug.log')
 configuration = YAML::load(IO.read('config/database.yml'))
-ActiveRecord::Base.establish_connection(configuration['development'])
+ActiveRecord::Base.establish_connection(configuration['production'])
 DELETE_LOG = "https://en.wikipedia.org/w/index.php?title=Special%3ALog&type=delete&page="
 
 class Article < ActiveRecord::Base
