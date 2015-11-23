@@ -6,8 +6,8 @@ development:
   timeout: 5000
 
 production:
-  url: ENV['DATABASE_URL']
-  # adapter: postgresql
+  url: <%= ENV['DATABASE_URL'] %>
+  adapter: postgresql
   # database: wiki_archive
   # encoding: unicode
   # # username: wiki
