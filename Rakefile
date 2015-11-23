@@ -1,5 +1,8 @@
 require './article'
 
+require 'standalone_migrations'
+StandaloneMigrations::Tasks.load_tasks
+
 task :default => :migrate
 
 desc "Run migrations"
