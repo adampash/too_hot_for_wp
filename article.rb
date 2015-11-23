@@ -2,7 +2,7 @@ require 'mechanize'
 require 'paperclip'
 
 WP_URL = "https://en.wikipedia.org"
-DELETE_LOG = "/w/index.php?title=Special%3ALog&type=delete&page="
+DELETE_LOG = "w/index.php?title=Special%3ALog&type=delete&page="
 
 class Article < ActiveRecord::Base
   include Paperclip::Glue
@@ -16,21 +16,21 @@ class Article < ActiveRecord::Base
 
   def self.archive_pages
     where(archived: false).each_with_index do | article, index |
-      puts "Checking article ##{index}"
+      puts "Archiving article ##{index}"
       article.archive
     end
   end
 
   def self.check_all_for_deletions
     where(deleted: false).each_with_index do | article, index |
-      puts "Checking article ##{index}"
+      puts "Checking for deletion ##{index}"
       article.check_for_deletion
     end
   end
 
   def archive
     www = mechanize.get("#{WP_URL}/wiki/#{title.gsub(' ', '_')}")
-    filename = "#{title}.html"
+    filename = "tmp/#{title.gsub(' ', '_')}.html"
     www.save_as(filename)
     file = File.open(filename, 'r')
     begin
@@ -51,7 +51,7 @@ class Article < ActiveRecord::Base
   end
 
   def check_for_deletion
-    url = "#{DELETE_LOG}#{title}"
+    url = "#{WP_URL}/#{DELETE_LOG}#{title}"
     www = mechanize.get(url)
     result = www.link_with(:text => "Wikipedia:Articles for deletion/#{title}")
     if result
