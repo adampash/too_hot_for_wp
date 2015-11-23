@@ -62,6 +62,7 @@ class Article < ActiveRecord::Base
         update_attributes(
           deleted: true,
           on_list: false,
+          deleted_at: Time.now
         )
       end
     end
