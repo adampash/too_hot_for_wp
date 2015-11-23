@@ -7,7 +7,7 @@ module ArticleMailer
       :subject => "#{articles.count} deletions today",
       :text    => build_text(articles)
     }
-    mg_client.send_message "labs@gawker.com", message_params
+    mg_client.send_message ENV["MAILGUN_DOMAIN"], message_params
   end
 
   def self.build_text(articles)
