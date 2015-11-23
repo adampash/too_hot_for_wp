@@ -17,3 +17,8 @@ task :scrape do
   Article.archive_pages
   Article.check_all_for_deletions
 end
+
+desc "Send daily email digest"
+task :scrape do
+  Article.daily_digest
+end
