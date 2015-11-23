@@ -1,11 +1,15 @@
 development:
   adapter: postgresql
   database: wiki_archive
+  encoding: unicode
   pool: 5
   timeout: 5000
 
 production:
   adapter: postgresql
   database: wiki_archive
-  pool: 5
+  encoding: unicode
+  username: wiki
+  password: <%= ENV['WIKI_ARCHIVE_DATABASE_PASSWORD'] %>
+  pool: <%= ENV["DB_POOL"] || ENV['MAX_THREADS'] || 5 %>
   timeout: 5000
