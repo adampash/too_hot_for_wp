@@ -19,6 +19,6 @@ task :scrape do
 end
 
 desc "Send daily email digest"
-task :scrape do
+task :digest do
   Article.daily_digest
 end
