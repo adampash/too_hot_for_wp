@@ -1,5 +1,5 @@
 require 'mechanize'
-require_relative './article'
+require_relative './app'
 
 URL = "https://en.wikipedia.org"
 class WikiScrape
