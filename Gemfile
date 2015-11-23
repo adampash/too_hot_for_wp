@@ -5,3 +5,6 @@ gem 'mechanize'
 gem 'activerecord'
 gem 'sqlite3'
 gem 'logger'
+gem "paperclip", git: "git://github.com/thoughtbot/paperclip.git"
+gem 'aws-sdk', '>= 2.0.0'
+gem 'dotenv'
