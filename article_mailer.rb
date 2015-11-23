@@ -3,7 +3,7 @@ module ArticleMailer
     mg_client = Mailgun::Client.new ENV["MAILGUN_API_KEY"]
     message_params = {
       :from    => 'labs@gawker.com',
-      :to      => 'pash@gawker.com',
+      :to      => 'pash@gawker.com, ashley@gawker.com',
       :subject => "#{articles.count} deletions today",
       :html    => build_text(articles)
     }
