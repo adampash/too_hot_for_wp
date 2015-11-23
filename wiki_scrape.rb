@@ -49,7 +49,3 @@ class WikiScrape
     )
   end
 end
-
-ts = WikiScrape.new
-ts.fetch_and_save_all_articles
-Article.check_all_for_deletions
