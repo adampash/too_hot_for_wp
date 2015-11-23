@@ -14,13 +14,17 @@ module ArticleMailer
   end
 
   def self.build_text(articles)
-    articles.reduce('') do |acc, article|
-      acc += "
+    if articles.length == 0
+      "<p>No deletions today :(</p>"
+    else
+      articles.reduce('') do |acc, article|
+        acc += "
         <p>
           <b><a href=\"#{article.page.url}\">#{article.title}</a></b>
           [<a href=\"https://en.wikipedia.org/wiki/Wikipedia:Articles_for_deletion/#{article.title.gsub(' ', '_')}\">Discussion</a>]
-      "
-      acc
+        "
+        acc
+      end
     end
   end
 end
