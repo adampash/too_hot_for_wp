@@ -14,5 +14,6 @@ task :scrape do
   require_relative './wiki_scrape'
   ts = WikiScrape.new
   ts.fetch_and_save_all_articles
+  Article.archive_pages
   Article.check_all_for_deletions
 end

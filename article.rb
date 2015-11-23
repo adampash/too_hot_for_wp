@@ -1,7 +1,8 @@
 require 'mechanize'
 require 'paperclip'
 
-DELETE_LOG = "https://en.wikipedia.org/w/index.php?title=Special%3ALog&type=delete&page="
+WP_URL = "https://en.wikipedia.org"
+DELETE_LOG = "/w/index.php?title=Special%3ALog&type=delete&page="
 
 class Article < ActiveRecord::Base
   include Paperclip::Glue
@@ -13,6 +14,12 @@ class Article < ActiveRecord::Base
     :s3_credentials => Proc.new{|a| a.instance.s3_credentials }
   validates_attachment_content_type :page, content_type: /\Atext\/.*\Z/
 
+  def self.archive_pages
+    where(archived: false).each_with_index do | article, index |
+      puts "Checking article ##{index}"
+      article.archive
+    end
+  end
 
   def self.check_all_for_deletions
     where(deleted: false).each_with_index do | article, index |
@@ -22,16 +29,33 @@ class Article < ActiveRecord::Base
   end
 
   def archive
-    # TODO save to cloud
+    www = mechanize.get("#{WP_URL}/wiki/#{title.gsub(' ', '_')}")
+    filename = "#{title}.html"
+    www.save_as(filename)
+    file = File.open(filename, 'r')
+    begin
+      self.page = file
+      if save
+        self.archived = true
+        save
+      else
+        puts "didn't work"
+      end
+    rescue
+      puts "didn't work"
+    end
+  end
+
+  def mechanize
+    Mechanize.new
   end
 
   def check_for_deletion
-    mechanize = Mechanize.new
     url = "#{DELETE_LOG}#{title}"
-    page = mechanize.get(url)
-    result = page.link_with(:text => "Wikipedia:Articles for deletion/#{title}")
+    www = mechanize.get(url)
+    result = www.link_with(:text => "Wikipedia:Articles for deletion/#{title}")
     if result
-      deleted = page.link_with(text: title).attributes
+      deleted = www.link_with(text: title).attributes
         .attributes["href"].value.index('redlink=1') != nil
       if deleted
         puts "Deleted #{title}!"
