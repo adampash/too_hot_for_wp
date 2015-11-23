@@ -1,11 +1,11 @@
 development:
-  adapter: pg
-  database: 'wiki-archive'
+  adapter: postgresql
+  database: wiki_archive
   pool: 5
   timeout: 5000
 
 production:
-  adapter: pg
-  database: 'wiki-archive'
+  adapter: postgresql
+  database: wiki_archive
   pool: 5
   timeout: 5000
