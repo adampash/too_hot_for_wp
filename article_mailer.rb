@@ -5,7 +5,7 @@ module ArticleMailer
       :from    => 'labs@gawker.com',
       :to      => 'pash@gawker.com, ashley@gawker.com',
       :subject => "#{articles.count} deletions today",
-      :text    => build_text(articles)
+      :html    => build_text(articles)
     }
     mg_client.send_message ENV["MAILGUN_DOMAIN"], message_params
   end
