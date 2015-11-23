@@ -8,7 +8,7 @@ class Article < ActiveRecord::Base
   validates_uniqueness_of :title
   has_attached_file :page,
     :storage => :s3,
-    :path => 'wikipedia/artciles/:id/:filename',
+    :path => 'wikipedia/articles/:id/:filename',
     :s3_region => 'us-east-1',
     :s3_credentials => Proc.new{|a| a.instance.s3_credentials }
   validates_attachment_content_type :page, content_type: /\Atext\/.*\Z/
