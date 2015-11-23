@@ -1,5 +1,7 @@
 require 'mechanize'
 require 'paperclip'
+require 'mailgun'
+require_relative './article_mailer'
 
 WP_URL = "https://en.wikipedia.org"
 DELETE_LOG = "w/index.php?title=Special%3ALog&type=delete&page="
@@ -10,7 +12,7 @@ class Article < ActiveRecord::Base
   has_attached_file :page,
     :storage => :s3,
     :path => "wikipedia/#{ENV["ENVIRONMENT"] != "production" ? 'testing/' : ''}articles/:id/:filename",
-    :s3_region => 'us-east-1',
+  :s3_region => 'us-east-1',
     :s3_credentials => Proc.new{|a| a.instance.s3_credentials }
   validates_attachment_content_type :page, content_type: /\Atext\/.*\Z/
 
@@ -41,6 +43,14 @@ class Article < ActiveRecord::Base
     end
   end
 
+  def self.deleted_today
+    where('deleted_at >= ?', 1.day.ago)
+  end
+
+  def self.daily_digest
+    ArticleMailer.mail(deleted_today)
+  end
+
   def archive
     www = mechanize.get("#{WP_URL}/wiki/#{title.gsub(' ', '_')}")
     filename = "tmp/#{title.gsub(' ', '_')}.html"
@@ -69,7 +79,7 @@ class Article < ActiveRecord::Base
     result = www.link_with(:text => "Wikipedia:Articles for deletion/#{title}")
     if result
       deleted = www.link_with(text: title).attributes
-        .attributes["href"].value.index('redlink=1') != nil
+      .attributes["href"].value.index('redlink=1') != nil
       if deleted
         puts "Deleted #{title}!"
         update_attributes(
