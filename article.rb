@@ -1,6 +1,5 @@
 require 'mechanize'
 require 'paperclip'
-require 'mailgun'
 require_relative './article_mailer'
 
 WP_URL = "https://en.wikipedia.org"

@@ -1,3 +1,5 @@
+require 'mailgun'
+
 module ArticleMailer
   def self.mail(articles)
     mg_client = Mailgun::Client.new ENV["MAILGUN_API_KEY"]
@@ -7,8 +9,8 @@ module ArticleMailer
       :subject => "#{articles.count} deletions today",
       :html    => build_text(articles)
     }
-    # mg_client.send_message ENV["MAILGUN_DOMAIN"], message_params
-    mg_client.send_message "app185bded172554a3a936cde24416d7ed6.mailgun.org", message_params
+    mg_client.send_message(ENV["MAILGUN_DOMAIN"], message_params)
+    # mg_client.send_message "app185bded172554a3a936cde24416d7ed6.mailgun.org", message_params
   end
 
   def self.build_text(articles)
