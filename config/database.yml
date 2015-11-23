@@ -3,3 +3,9 @@ development:
   database: 'wiki-archive'
   pool: 5
   timeout: 5000
+
+production:
+  adapter: pg
+  database: 'wiki-archive'
+  pool: 5
+  timeout: 5000
