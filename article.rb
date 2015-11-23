@@ -8,7 +8,10 @@ Dotenv.load
 
 # ActiveRecord::Base.logger = Logger.new('debug.log')
 # configuration = YAML::load(IO.read('config/database.yml'))
-ActiveRecord::Base.establish_connection({url: ENV["DATABASE_URL"]})
+ActiveRecord::Base.establish_connection({
+  url: ENV["DATABASE_URL"],
+  adapter: postgresql
+})
 DELETE_LOG = "https://en.wikipedia.org/w/index.php?title=Special%3ALog&type=delete&page="
 
 class Article < ActiveRecord::Base
