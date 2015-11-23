@@ -44,8 +44,6 @@ class WikiScrape
 
   def extract_article(article)
     title = article.attributes["title"].value
-    Article.create(
-      title: title,
-    )
+    Article.update_or_create(title)
   end
 end

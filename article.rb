@@ -14,6 +14,19 @@ class Article < ActiveRecord::Base
     :s3_credentials => Proc.new{|a| a.instance.s3_credentials }
   validates_attachment_content_type :page, content_type: /\Atext\/.*\Z/
 
+  def self.update_or_create(title)
+    article = find_by(title: title)
+    if article
+      article.update_attributes(last_seen: Time.now)
+    else
+      article = Article.create(
+        title: title,
+        last_seen: Time.now,
+      )
+    end
+    article
+  end
+
   def self.archive_pages
     where(archived: false).each_with_index do | article, index |
       puts "Archiving article ##{index}"
