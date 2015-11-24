@@ -51,8 +51,8 @@ class Article < ActiveRecord::Base
   end
 
   def archive
-    www = mechanize.get("#{WP_URL}/wiki/#{title.gsub(' ', '_')}")
-    filename = "tmp/#{title.gsub(' ', '_')}.html"
+    www = mechanize.get("#{WP_URL}/wiki/#{title_score}")
+    filename = "tmp/#{title_score}.html"
     www.save_as(filename)
     file = File.open(filename, 'r')
     begin
@@ -90,6 +90,36 @@ class Article < ActiveRecord::Base
     end
   end
 
+  def to_html
+    doc = Nokogiri::HTML(open(page.url))
+    links = doc.css('a, link')
+    links.map do | link |
+      href = link.attributes["href"]
+      if href
+        url = href.value.gsub(/(^\/\w)/, WP_URL + '\1')
+        link["href"] = url
+      end
+    end
+    src = doc.css('img, script')
+    src.map do | link |
+      src = link.attributes["src"]
+      if src
+        url = src.value.gsub(/(^\/\w)/, WP_URL + '\1')
+        link["src"] = url
+      end
+    end
+    doc.to_html
+  end
+
+  def page_url
+    "#{ENV["BASE_URL"]}/wiki/#{title_score}"
+  end
+
+  def title_score
+    title.gsub(' ', '_')
+  end
+
+  private
   def s3_credentials
     {
       :bucket => ENV["AWS_BUCKET"],

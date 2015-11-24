@@ -11,3 +11,4 @@ gem "paperclip", git: "git://github.com/thoughtbot/paperclip.git"
 gem 'aws-sdk', '>= 2.0.0'
 gem 'dotenv'
 gem 'mailgun-ruby', '~>1.0.3', require: 'mailgun'
+gem 'sinatra'

@@ -20,8 +20,8 @@ module ArticleMailer
       articles.reduce('') do |acc, article|
         acc += "
         <p>
-          <b><a href=\"#{article.page.url}\">#{article.title}</a></b>
-          [<a href=\"https://en.wikipedia.org/wiki/Wikipedia:Articles_for_deletion/#{article.title.gsub(' ', '_')}\">Discussion</a>]
+          <b><a href=\"#{article.page_url}\">#{article.title}</a></b>
+          [<a href=\"https://en.wikipedia.org/wiki/Wikipedia:Articles_for_deletion/#{article.title_score}\">Discussion</a>]
         "
         acc
       end
