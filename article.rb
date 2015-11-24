@@ -1,4 +1,5 @@
 require 'mechanize'
+require 'slack-notifier'
 require 'paperclip'
 require_relative './article_mailer'
 
@@ -88,8 +89,24 @@ class Article < ActiveRecord::Base
           on_list: false,
           deleted_at: Time.now
         )
+        notify
       end
     end
+  end
+
+  def notify
+    icon = %w(
+      :death:
+      :cry:
+      :bomb:
+      :boom:
+    )
+    Slack::Notifier.new(
+      ENV["SLACK_WEBHOOK_URL"],
+      channel: "too-hot-for-wp",
+      username: "WikiBot",
+      icon_emoji: ':wikipedia:',
+    ).ping("#{icon.sample} [#{title}](#{page_url}) #{icon.sample}")
   end
 
   def to_html
