@@ -65,8 +65,8 @@ class Article < ActiveRecord::Base
       end
     rescue Exception => e
       puts "didn't work"
-      puts e.message
-      puts e.backtrace.inspect
+      p e.message
+      p e.backtrace.inspect
     end
   end
 
@@ -121,7 +121,6 @@ class Article < ActiveRecord::Base
     title.gsub(' ', '_')
   end
 
-  protected
   def s3_credentials
     {
       :bucket => ENV["AWS_BUCKET"],
