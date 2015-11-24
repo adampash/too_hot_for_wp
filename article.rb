@@ -121,7 +121,7 @@ class Article < ActiveRecord::Base
     title.gsub(' ', '_')
   end
 
-  private
+  protected
   def s3_credentials
     {
       :bucket => ENV["AWS_BUCKET"],
