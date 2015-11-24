@@ -63,8 +63,10 @@ class Article < ActiveRecord::Base
       else
         puts "didn't work"
       end
-    rescue
+    rescue Exception => e
       puts "didn't work"
+      puts e.message
+      puts e.backtrace.inspect
     end
   end
 
