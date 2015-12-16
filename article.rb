@@ -51,8 +51,12 @@ class Article < ActiveRecord::Base
   def self.check_all_for_deletions
     not_deleted.still_listed.each_with_index do | article, index |
     # where(deleted: false).each_with_index do | article, index |
-      puts "Checking for deletion ##{index}"
-      article.check_for_deletion
+      begin
+        puts "Checking for deletion ##{index}"
+        article.check_for_deletion
+      rescue Exception => e
+        puts e.message
+      end
     end
   end
 
