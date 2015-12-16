@@ -33,11 +33,15 @@ class WikiScrape
     page = 0
     article_count = 0
     until @next.nil?
-      puts "Fetching page #{page += 1}"
-      articles = fetch_page
-      articles.each do |article|
-        puts "    Saving article #{article_count += 1}"
-        extract_article(article)
+      begin
+        puts "Fetching page #{page += 1}"
+        articles = fetch_page
+        articles.each do |article|
+          puts "    Saving article #{article_count += 1}"
+          extract_article(article)
+        end
+      rescue Exception => e
+        puts e.message
       end
     end
   end

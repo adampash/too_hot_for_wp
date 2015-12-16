@@ -31,8 +31,12 @@ class Article < ActiveRecord::Base
 
   def self.archive_pages
     where(archived: false).each_with_index do | article, index |
-      puts "Archiving article ##{index}"
-      article.archive
+      begin
+        puts "Archiving article ##{index}"
+        article.archive
+      rescue Exception => e
+        puts e.message
+      end
     end
   end
 

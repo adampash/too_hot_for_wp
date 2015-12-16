@@ -18,11 +18,7 @@ task :scrape do
   rescue Exception => e
     puts e.message
   end
-  begin
-    Article.archive_pages
-  rescue Exception => e
-    puts e.message
-  end
+  Article.archive_pages
   begin
     Article.check_all_for_deletions
   rescue Exception => e
