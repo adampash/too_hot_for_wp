@@ -15,12 +15,18 @@ task :scrape do
   ts = WikiScrape.new
   begin
     ts.fetch_and_save_all_articles
+  rescue Exception => e
+    puts e.message
   end
   begin
     Article.archive_pages
+  rescue Exception => e
+    puts e.message
   end
   begin
     Article.check_all_for_deletions
+  rescue Exception => e
+    puts e.message
   end
 end
 
