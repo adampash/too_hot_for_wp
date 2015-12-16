@@ -13,9 +13,15 @@ desc "Scrape articles for deletion"
 task :scrape do
   require_relative './wiki_scrape'
   ts = WikiScrape.new
-  ts.fetch_and_save_all_articles
-  Article.archive_pages
-  Article.check_all_for_deletions
+  begin
+    ts.fetch_and_save_all_articles
+  end
+  begin
+    Article.archive_pages
+  end
+  begin
+    Article.check_all_for_deletions
+  end
 end
 
 desc "Send daily email digest"
