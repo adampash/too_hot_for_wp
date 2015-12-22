@@ -12,6 +12,7 @@ configure do
 end
 
 get '/wiki/:title' do |title|
+  headers['Cache-Control'] = 'max-age=31536000' # one year
   article = Article.find_by(title: title.gsub('_', ' '))
   article.to_html
 end
