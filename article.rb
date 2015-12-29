@@ -123,7 +123,8 @@ class Article < ActiveRecord::Base
       channel: "too-hot-for-wp",
       username: "WikiBot",
       icon_emoji: ':wikipedia:',
-    ).ping("#{icon.sample} [#{title}](#{page_url}) #{icon.sample}")
+    ).ping("#{icon.sample} <a href=\"#{page_url}\">#{title}</a> #{icon.sample}")
+    # ).ping("#{icon.sample} [#{title}](#{page_url}) #{icon.sample}")
   end
 
   def to_html
