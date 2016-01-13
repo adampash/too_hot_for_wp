@@ -124,7 +124,6 @@ class Article < ActiveRecord::Base
       username: "WikiBot",
       icon_emoji: ':wikipedia:',
     ).ping("#{icon.sample} <a href=\"#{page_url}\">#{title}</a> #{icon.sample}")
-    # ).ping("#{icon.sample} [#{title}](#{page_url}) #{icon.sample}")
   end
 
   def to_html
