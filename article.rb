@@ -17,7 +17,7 @@ class Article < ActiveRecord::Base
   validates_attachment_content_type :page, content_type: /\Atext\/.*\Z/
 
   def self.update_or_create(title)
-    article = find_by(title: title)
+    article = find_by(title: sanitize(title))
     if article
       article.update_attributes(last_seen: Time.now)
     else
@@ -27,6 +27,10 @@ class Article < ActiveRecord::Base
       )
     end
     article
+  end
+
+  def sanitize(title="oh \"hi\" it's me/you")
+    title.gsub(/['"\/]/, '')
   end
 
   def self.archive_pages
