@@ -96,9 +96,12 @@ class Article < ActiveRecord::Base
     Mechanize.new
   end
 
+  def delete_log_url
+    "#{WP_URL}/#{DELETE_LOG}#{title}"
+  end
+
   def check_for_deletion
-    url = "#{WP_URL}/#{DELETE_LOG}#{title}"
-    www = mechanize.get(url)
+    www = mechanize.get(delete_log_url)
     result = www.link_with(:text => "Wikipedia:Articles for deletion/#{title}")
     if result
       deleted = www.link_with(text: title).attributes
@@ -111,7 +114,11 @@ class Article < ActiveRecord::Base
           deleted_at: Time.now
         )
         notify
+      else
+        puts "Still up #{title}"
       end
+    else
+      puts "No result"
     end
   end
 
