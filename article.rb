@@ -97,7 +97,7 @@ class Article < ActiveRecord::Base
   end
 
   def delete_log_url
-    "#{WP_URL}/#{DELETE_LOG}#{title}"
+    "#{WP_URL}/#{DELETE_LOG}#{URI.encode title}"
   end
 
   def check_for_deletion
