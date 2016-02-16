@@ -1,7 +1,7 @@
 <div style="max-width: 500px; width: 100%">
   <% for article in @articles %>
     <div>
-      <a href="<%= article.page_url %>">
+      <a href="<%= article.page_url %>" style="color: <%= article.deleted ? "red;" : "black" %>">
         <%= article.title %>
       </a> <span> - <%= article.created_at.strftime("%B %d, %Y") %></span>
     </div>
