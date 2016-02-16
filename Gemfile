@@ -17,3 +17,6 @@ gem 'sinatra-contrib'
 gem 'rack'
 gem 'puma'
 gem 'slack-notifier'
+gem 'kaminari', :require => 'kaminari/sinatra'
+gem 'padrino-helpers'
+

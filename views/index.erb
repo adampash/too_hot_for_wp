@@ -1,0 +1,10 @@
+<div style="max-width: 500px; width: 100%">
+  <% for article in @articles %>
+    <div>
+      <a href="<%= article.page_url %>">
+        <%= article.title %>
+      </a> <span> - <%= article.created_at.strftime("%B %d, %Y") %></span>
+    </div>
+  <% end %>
+  <%= paginate @articles %>
+</div>
