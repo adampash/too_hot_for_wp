@@ -21,7 +21,6 @@ get '/wiki/:title' do |title|
 end
 
 get '/' do
-  puts params
   page = params["page"] || 1
   @articles = Article.order(created_at: "DESC").page(page).per(50)
   erb :index, :layout => :layout
