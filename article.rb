@@ -100,13 +100,15 @@ class Article < ActiveRecord::Base
     "#{WP_URL}/#{DELETE_LOG}#{URI.encode title}"
   end
 
+  def wp_url
+    "#{WP_URL}/wiki/#{URI.encode title}"
+  end
+
   def check_for_deletion
-    www = mechanize.get(delete_log_url)
-    result = www.link_with(:text => "Wikipedia:Articles for deletion/#{title}")
-    if result
-      deleted = www.link_with(text: title).attributes
-      .attributes["href"].value.index('redlink=1') != nil
-      if deleted
+    begin
+      mechanize.get(wp_url)
+    rescue Exception => e
+      if e.response_code == "404"
         puts "Deleted #{title}!"
         update_attributes(
           deleted: true,
@@ -114,11 +116,7 @@ class Article < ActiveRecord::Base
           deleted_at: Time.now
         )
         notify
-      else
-        puts "Still up #{title}"
       end
-    else
-      puts "No result"
     end
   end
 
