@@ -49,7 +49,7 @@ class Article < ActiveRecord::Base
   end
 
   def self.still_listed
-    where('last_seen >= ?', 2.days.ago)
+    where('last_seen >= ?', 14.days.ago)
   end
 
   def self.check_all_for_deletions
