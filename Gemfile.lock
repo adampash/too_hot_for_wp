@@ -173,6 +173,7 @@ DEPENDENCIES
   pry
   puma
   rack
+  rake (~> 10.0)
   sinatra
   sinatra-contrib
   slack-notifier

@@ -9,6 +9,13 @@ DELETE_LOG = "w/index.php?title=Special%3ALog&type=delete&page="
 class Article < ActiveRecord::Base
   include Paperclip::Glue
   validates_uniqueness_of :title
+  has_attached_file :talk_page,
+    :storage => :s3,
+    :path => "wikipedia/#{ENV["ENVIRONMENT"] != "production" ? 'testing/' : ''}articles/:id/talk/:filename",
+  :s3_region => 'us-east-1',
+    :s3_credentials => Proc.new{|a| a.instance.s3_credentials }
+  validates_attachment_content_type :talk_page, content_type: /\Atext\/.*\Z/
+
   has_attached_file :page,
     :storage => :s3,
     :path => "wikipedia/#{ENV["ENVIRONMENT"] != "production" ? 'testing/' : ''}articles/:id/:filename",
@@ -38,6 +45,7 @@ class Article < ActiveRecord::Base
       begin
         puts "Archiving article ##{index}"
         article.archive
+        article.archive_talk
       rescue Exception => e
         puts e.message
       end
@@ -85,6 +93,20 @@ class Article < ActiveRecord::Base
       else
         puts "didn't work"
       end
+    rescue Exception => e
+      puts "didn't work"
+      p e.message
+      p e.backtrace.inspect
+    end
+  end
+
+  def archive_talk
+    www = mechanize.get("#{WP_URL}/wiki/Talk:#{title_score}")
+    filename = "tmp/Talk_#{title_score}.html"
+    www.save_as(filename)
+    file = File.open(filename, 'r')
+    begin
+      self.talk_page = file
     rescue Exception => e
       puts "didn't work"
       p e.message
