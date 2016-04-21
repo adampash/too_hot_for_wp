@@ -135,10 +135,6 @@ class Article < ActiveRecord::Base
     ).ping("#{icon.sample} <a href=\"#{page_url}\">#{title}</a> #{icon.sample}")
   end
 
-  def single_quote(s)
-    s.gsub(/'/, "%27")
-  end
-
   def to_html
     doc = Nokogiri::HTML(open(page.url))
     links = doc.css('a, link')
@@ -161,7 +157,7 @@ class Article < ActiveRecord::Base
   end
 
   def page_url
-    "#{ENV["BASE_URL"]}/wiki/#{title_score}"
+    "#{ENV["BASE_URL"]}/wiki/#{URI.encode_www_form_component title_score}"
   end
 
   def title_score
