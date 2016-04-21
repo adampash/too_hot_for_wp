@@ -178,8 +178,33 @@ class Article < ActiveRecord::Base
     doc.to_html
   end
 
+  def talk_to_html
+    doc = Nokogiri::HTML(open(talk_page.url))
+    links = doc.css('a, link')
+    links.map do | link |
+      href = link.attributes["href"]
+      if href
+        url = href.value.gsub(/(^\/\w)/, WP_URL + '\1')
+        link["href"] = url
+      end
+    end
+    src = doc.css('img, script')
+    src.map do | link |
+      src = link.attributes["src"]
+      if src
+        url = src.value.gsub(/(^\/\w)/, WP_URL + '\1')
+        link["src"] = url
+      end
+    end
+    doc.to_html
+  end
+
   def page_url
     "#{ENV["BASE_URL"]}/wiki/#{URI.encode_www_form_component title_score}"
+  end
+
+  def talk_url
+    "#{ENV["BASE_URL"]}/wiki/Talk:#{URI.encode_www_form_component title_score}"
   end
 
   def title_score

@@ -14,6 +14,13 @@ configure do
   also_reload '*.rb'
 end
 
+get '/wiki/Talk\::title*' do |title, rest|
+  headers['Cache-Control'] = 'max-age=31536000' # one year
+  full_title = title + rest
+  article = Article.find_by(title: full_title.gsub('_', ' '))
+  article.talk_to_html
+end
+
 get '/wiki/:title*' do |title, rest|
   headers['Cache-Control'] = 'max-age=31536000' # one year
   full_title = title + rest
