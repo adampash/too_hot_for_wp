@@ -107,6 +107,7 @@ class Article < ActiveRecord::Base
     file = File.open(filename, 'r')
     begin
       self.talk_page = file
+      save
     rescue Exception => e
       puts "didn't work"
       p e.message
